@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Happy Birthday Amma and Jeene Aunty</title>
+    <title>Happy Birthday Amma and Jeen Aunty</title>
     <style>
         @keyframes change {
             0% {
@@ -12,7 +12,7 @@
 
 
             25% {
-                color: yellow
+                color: yellow;
             }
 
             50% {
@@ -28,6 +28,29 @@
             }
         }
 
+        @keyframes change2 {
+            0% {
+                background-color: red;
+            }
+
+
+            25% {
+                background-color: yellow;
+            }
+
+            50% {
+                background-color: rgb(0, 255, 0);
+            }
+
+            75% {
+                background-color: dodgerblue;
+            }
+
+            100% {
+                background-color: red;
+            }
+        }
+
         body {
             background-color: black;
             text-align: center;
@@ -39,11 +62,35 @@
         h1 {
             font-size: 50px;
         }
+
+        select, input{
+            animation-name: change2;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+            background-color: red;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Happy Birthday Amma and Jeene Aunty!</h1>
+    <h1>Happy Birthday Amma and Jeen Aunty!</h1>
+    <p>
+        <select id="s1" onchange="input_update()">
+            <option value="0">Green</option>
+            <option value="1">Blue</option>
+            <option value="2">Red</option>
+            <option value="3">Yellow</option>
+        </select>
+        particles attract
+        <select id="s2" onchange="input_update()">
+            <option value="0">Green</option>
+            <option value="1">Blue</option>
+            <option value="2">Red</option>
+            <option value="3">Yellow</option>
+        </select>
+        particles with a force of
+        <input type="number" id="r" onchange="rules_update()"><br>
+    </p>
     <canvas></canvas>
     <p>
         33 is the 11<sup>th</sup> semiprime<br>
@@ -53,15 +100,22 @@
     </p>
 
     <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         function setup() {
             createCanvas(500, 500, document.getElementsByTagName("canvas")[0])
             noStroke()
+            input_update()
         }
 
         let particles = []
         const force_power = 0.01;
-        let rules = [Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1,]
+        let rules = [
+            [Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1],
+            [Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1],
+            [Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1],
+            [Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1]
+        ]
 
         function createParticles(num, col) {
             let group = []
@@ -102,6 +156,14 @@
             }
         }
 
+        function rules_update() {
+            rules[Number($("#s1").val())][Number($("#s2").val())] = Number($("#r").val())
+        }
+
+        function input_update() {
+            $("#r").val(rules[Number($("#s1").val())][Number($("#s2").val())])
+        }
+
         function draw() {
             background(0)
 
@@ -123,23 +185,25 @@
                 }
             }
 
-            rule(greenParticles, greenParticles, rules[0])
-            rule(redParticles, redParticles, rules[1])
-            rule(yellowParticles, yellowParticles, rules[2])
-            rule(blueParticles, blueParticles, rules[3])
-            rule(yellowParticles, blueParticles, rules[4])
-            rule(redParticles, blueParticles, rules[5])
-            rule(greenParticles, blueParticles, rules[6])
-            rule(blueParticles, redParticles, rules[7])
-            rule(yellowParticles, redParticles, rules[8])
-            rule(greenParticles, redParticles, rules[9])
-            rule(redParticles, yellowParticles, rules[10])
-            rule(greenParticles, yellowParticles, rules[11])
-            rule(blueParticles, yellowParticles, rules[12])
-            rule(redParticles, greenParticles, rules[13])
-            rule(yellowParticles, greenParticles, rules[14])
-            rule(blueParticles, greenParticles, rules[15])
+            rule(greenParticles, greenParticles, rules[0][0])
+            rule(greenParticles, blueParticles, rules[0][1])
+            rule(greenParticles, redParticles, rules[0][2])
+            rule(greenParticles, yellowParticles, rules[0][3])
 
+            rule(blueParticles, greenParticles, rules[1][0])
+            rule(blueParticles, blueParticles, rules[1][1])
+            rule(blueParticles, redParticles, rules[1][2])
+            rule(blueParticles, yellowParticles, rules[1][3])
+
+            rule(redParticles, greenParticles, rules[2][0])
+            rule(redParticles, blueParticles, rules[2][1])
+            rule(redParticles, redParticles, rules[2][2])
+            rule(redParticles, yellowParticles, rules[2][3])
+
+            rule(yellowParticles, greenParticles, rules[3][0])
+            rule(yellowParticles, blueParticles, rules[3][1])
+            rule(yellowParticles, redParticles, rules[3][2])
+            rule(yellowParticles, yellowParticles, rules[3][3])
         }
     </script>
 </body>
