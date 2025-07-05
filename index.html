@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Happy Birthday Amma and Jeene Aunty</title>
+    <style>
+        @keyframes change {
+            0% {
+                color: red;
+            }
+
+
+            25% {
+                color: yellow
+            }
+
+            50% {
+                color: rgb(0, 255, 0);
+            }
+
+            75% {
+                color: dodgerblue;
+            }
+
+            100% {
+                color: red;
+            }
+        }
+
+        body {
+            background-color: black;
+            text-align: center;
+            animation-name: change;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+        }
+
+        h1 {
+            font-size: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Happy Birthday Amma and Jeene Aunty!</h1>
+    <canvas></canvas>
+    <p>
+        33 is the 11<sup>th</sup> semiprime<br>
+        33 is the largest possible number that cannot be expressed as the sum of different triangular numbers<br>
+        34 is the 12<sup>th</sup> semiprime<br>
+        34 is the sum of the first two perfect numbers
+    </p>
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+    <script>
+        function setup() {
+            createCanvas(500, 500, document.getElementsByTagName("canvas")[0])
+            noStroke()
+        }
+
+        let particles = []
+        const force_power = 0.01;
+        let rules = [Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1,]
+
+        function createParticles(num, col) {
+            let group = []
+            for (let i = 0; i < num; i++) {
+                group.push([Math.random() * 400 + 50, Math.random() * 400 + 50, 0, 0, col])
+                particles.push(group[i])
+            }
+            return group;
+        }
+
+        let yellowParticles = createParticles(100, "yellow")
+        let redParticles = createParticles(100, "red")
+        let greenParticles = createParticles(100, "green")
+        let blueParticles = createParticles(100, "dodgerblue")
+
+        function rule(g1, g2, force) {
+            for (p of g1) {
+                for (p2 of g2) {
+                    if (p != p2 && dist(p[0], p[1], p2[0], p2[1]) < 60) {
+                        const dist2 = dist(p[0], p[1], p2[0], p2[1])
+
+                        let attraction = force * force_power / dist2
+                        let xdist = Math.abs(p[0] - p2[0])
+                        let ydist = Math.abs(p[1] - p2[1])
+
+                        if (p2[0] > p[0]) {
+                            p[2] += attraction * xdist
+                        } else if (p2[0] < p[0]) {
+                            p[2] -= attraction * xdist
+                        }
+                        if (p2[1] > p[1]) {
+                            p[3] += attraction * ydist
+                        } else if (p2[1] < p[1]) {
+                            p[3] -= attraction * ydist
+                        }
+                    }
+                }
+            }
+        }
+
+        function draw() {
+            background(0)
+
+            for (let p of particles) {
+                fill(p[4])
+                circle(p[0], p[1], 7)
+                p[0] += p[2]
+                p[1] += p[3]
+
+                if (p[0] > 500) {
+                    p[0] -= 500
+                } else if (p[0] < 0) {
+                    p[0] += 500
+                }
+                if (p[1] > 500) {
+                    p[1] -= 500
+                } else if (p[1] < 0) {
+                    p[1] += 500
+                }
+            }
+
+            rule(greenParticles, greenParticles, rules[0])
+            rule(redParticles, redParticles, rules[1])
+            rule(yellowParticles, yellowParticles, rules[2])
+            rule(blueParticles, blueParticles, rules[3])
+            rule(yellowParticles, blueParticles, rules[4])
+            rule(redParticles, blueParticles, rules[5])
+            rule(greenParticles, blueParticles, rules[6])
+            rule(blueParticles, redParticles, rules[7])
+            rule(yellowParticles, redParticles, rules[8])
+            rule(greenParticles, redParticles, rules[9])
+            rule(redParticles, yellowParticles, rules[10])
+            rule(greenParticles, yellowParticles, rules[11])
+            rule(blueParticles, yellowParticles, rules[12])
+            rule(redParticles, greenParticles, rules[13])
+            rule(yellowParticles, greenParticles, rules[14])
+            rule(blueParticles, greenParticles, rules[15])
+
+        }
+    </script>
+</body>
+
+</html>
